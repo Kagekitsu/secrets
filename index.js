@@ -12,7 +12,7 @@ const port = 3000;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 var secret = ""
 
-app.request(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: true}));
 
 function secretPassword(req, res, next) {
     console.log(req.body);
