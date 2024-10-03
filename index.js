@@ -10,13 +10,15 @@ import { fileURLToPath } from "url";
 const app = express();
 const port = 3000;
 const __dirname = dirname(fileURLToPath(import.meta.url));
-var secret = ""
+var userIsAuthorized = false;
 
 app.use(bodyParser.urlencoded({extended: true}));
 
 function secretPassword(req, res, next) {
-    console.log(req.body);
-    secret = req.body["password"];
+    const password = req.body["password"];
+    if (password === "ILoveProgramming") {
+        userIsAuthorized = true;
+    }
     next();
 };
 
@@ -27,12 +29,13 @@ app.get("/", (req, res) => {
 });
 
 app.post("/check", (req, res) => {
-    res.sendFile(__dirname + "/public/secret.html");
+    if (userIsAuthorized) {
+        res.sendFile(__dirname + "/public/secret.html");
+    } else {
+        res.sendFile(__dirname + "/public/index.html");
+    }
 });
 
-app.post("/submit", (req, res) => {
-    res.send("<h1>Secrets</h1>");
-});
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}.`);
